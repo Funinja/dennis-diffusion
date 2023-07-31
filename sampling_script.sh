@@ -4,4 +4,4 @@ export TRAIN_FLAGS="--lr 2e-5 --batch_size 8 --microbatch 2 --seq_len 16 --max_n
 export SAMPLE_FLAGS="--batch_size 1 --num_samples 1 --timestep_respacing 5 --data_dir videos/";
 export OPENAI_LOGDIR=$PWD
 
-python3 scripts/video_sample.py --model_path ema_0.9999_500000.pt --data_dir videos/ --num_samples 1 --batch_size 1 --cond_frames 0,1,14,15, $MODEL_FLAGS $DIFFUSION_FLAGS
+python3 scripts/video_sample.py --model_path ema_0.9999_500000.pt --data_dir sample_vids/ --num_samples 1 --batch_size 1 --cond_frames 0,1,14,15, $MODEL_FLAGS $DIFFUSION_FLAGS
