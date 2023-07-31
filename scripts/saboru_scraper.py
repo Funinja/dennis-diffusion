@@ -18,7 +18,7 @@ def jprint(obj):
     print(text)
 
 # download url as mp4
-def download_mp4(file_url, page, entry, mp4_dir):
+def download_mp4(file_url, page, entry, mp4_dir, dim):
     # f = Path("scene_" + str(page) + "_" + str(entry) + ".mp4")
     name_mp4 = mp4_dir + "/scene_" + str(page) + "_" + str(entry) + ".mp4"
     cap = cv2.VideoCapture(file_url)
@@ -26,7 +26,6 @@ def download_mp4(file_url, page, entry, mp4_dir):
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    dim = (64, 64)
     
     if frame is not None:
         # dim = (int(width), int(height))
@@ -67,13 +66,13 @@ def get_page(page, entry_limit, mp4_dir):
             if entry_limit != -1 and entry_limit <= index:
                 break
             
-            download_mp4(entry['file_url'], page, index, mp4_dir=mp4_dir)
+            download_mp4(entry['file_url'], page, index, mp4_dir=mp4_dir, dim=(128,128))
             
         
         return num_entries
 
 # page limit == -1 causes all pages to be read
-def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=20):
+def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     
     page = 0
     

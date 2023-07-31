@@ -16,11 +16,12 @@ def split_sequences(l_seq=20):
         cap = cv2.VideoCapture(file)
         ret, frame = cap.read()
         fps = cap.get(cv2.CAP_PROP_FPS)
-        dim = (64, 64)
         seq_count = 1
+        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        dim = (int(width), int(height))
         
         if frame is not None:
-            # dim = (int(width), int(height))
             name_mp4 = file[:-4] + "_" + str(seq_count) + ".mp4"
             out = cv2.VideoWriter(name_mp4, fourcc, fps, dim)
             frame_no = 0

@@ -1,0 +1,53 @@
+Logging to /home/dennis/Documents/dennis-diffusion
+-------------------------------------
+| anneal_type            | None     |
+| attention_resolutions  | 16,8     |
+| batch_size             | 8        |
+| class_cond             | 0        |
+| clip                   | 1        |
+| data_dir               | videos/  |
+| decay                  | 0        |
+| diffusion_steps        | 1e+03    |
+| drop                   | 0        |
+| dropout                | 0        |
+| ema_rate               | 0.9999   |
+| exclude_conditional    | 1        |
+| fp16_scale_growth      | 0.001    |
+| image_size             | 128      |
+| learn_sigma            | 0        |
+| log_interval           | 10       |
+| lr                     | 2e-05    |
+| lr_anneal_steps        | 0        |
+| mask_range             | None     |
+| max_num_mask_frames    | 4        |
+| microbatch             | 2        |
+| noise_schedule         | linear   |
+| num_channels           | 128      |
+| num_heads              | 4        |
+| num_heads_upsample     | -1       |
+| num_res_blocks         | 3        |
+| predict_xstart         | 0        |
+| rescale_learned_sigmas | 1        |
+| rescale_timesteps      | 1        |
+| resume_checkpoint      |          |
+| rgb                    | 1        |
+| save_interval          | 2e+03    |
+| scale_time_dim         | 0        |
+| schedule_sampler       | uniform  |
+| seed                   | 123      |
+| seq_len                | 30       |
+| sigma_small            | 0        |
+| steps_drop             | 0        |
+| timestep_respacing     |          |
+| uncondition_rate       | 0.25     |
+| use_checkpoint         | 0        |
+| use_fp16               | 0        |
+| use_kl                 | 0        |
+| use_scale_shift_norm   | 1        |
+| weight_decay           | 0        |
+-------------------------------------
+creating model and diffusion...
+creating data loader...
+training...
+global batch size = 8
+world_size: 1
