@@ -1,7 +1,7 @@
 from scenedetect import detect, AdaptiveDetector, split_video_ffmpeg
 import os
 
-def split():
+def c_split(l_seq):
     
     cwd = os.getcwd()
     
@@ -17,9 +17,8 @@ def split():
         new_list = []
         
         for scene in scene_list:
-            numFrames = 16
             
-            if scene[1].get_frames() - scene[0].get_frames() >= numFrames:
+            if scene[1].get_frames() - scene[0].get_frames() >= l_seq:
                 new_list.append(scene)
             
         split_video_ffmpeg(file, new_list)
@@ -29,4 +28,4 @@ def split():
     os.chdir(cwd)
 
 if __name__ == '__main__':
-    split()
+    c_split(20)

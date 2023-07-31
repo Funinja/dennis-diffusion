@@ -1,9 +1,10 @@
 
 import requests
 import json
-from pathlib import Path
-import os
 import cv2
+
+from content_splitter import c_split
+from sequence_splitter import split_sequences
 
 base_url = 'https://sakugabooru.com/post.json'
 
@@ -72,7 +73,7 @@ def get_page(page, entry_limit, mp4_dir):
         return num_entries
 
 # page limit == -1 causes all pages to be read
-def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos"):
+def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=20):
     
     page = 0
     
@@ -83,6 +84,10 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos"):
             break
         page += 1
         num_entries = get_page(page, entry_limit, mp4_dir)
+        
+        
+    c_split(l_seq)
+    split_sequences(l_seq)
     
 
 if __name__ == '__main__':
