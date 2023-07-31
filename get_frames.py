@@ -1,7 +1,7 @@
 from numpy import load
 from PIL import Image
 
-data = load('1x16x64x64x3.npz')
+data = load('1x16x32x32x3.npz')
 lst = data.files
 info = data[lst[0]]
 print(info.shape)
