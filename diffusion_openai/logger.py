@@ -451,6 +451,7 @@ def configure(dir=None, format_strs=None, comm=None, log_suffix=""):
             datetime.datetime.now().strftime("openai-%Y-%m-%d-%H-%M-%S-%f"),
         )
     assert isinstance(dir, str)
+    print(dir)
     dir = os.path.expanduser(dir)
     os.makedirs(os.path.expanduser(dir), exist_ok=True)
 

@@ -3,8 +3,12 @@ import requests
 import json
 from pathlib import Path
 import os
+import cv2
 
 base_url = 'https://sakugabooru.com/post.json'
+
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+
 
 def jprint(obj):
     
@@ -14,30 +18,39 @@ def jprint(obj):
 
 # download url as mp4
 def download_mp4(file_url, page, entry, mp4_dir):
-    f = Path("scene_" + str(page) + "_" + str(entry) + ".mp4")
+    # f = Path("scene_" + str(page) + "_" + str(entry) + ".mp4")
+    name_mp4 = mp4_dir + "/scene_" + str(page) + "_" + str(entry) + ".mp4"
+    cap = cv2.VideoCapture(file_url)
+    ret, frame = cap.read()
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    dim = (64, 64)
     
-    cwd = os.getcwd()
-    
-    if mp4_dir == "":
-        new_path = os.path.join(cwd, "videos")
-        if not os.path.isdir(new_path):
-            os.mkdir(new_path)
+    if frame is not None:
+        # dim = (int(width), int(height))
+        out = cv2.VideoWriter(name_mp4, fourcc, fps, dim)
         
-        os.chdir(new_path)
         
-    else:
-        os.chdir(mp4_dir)
+        while(frame is not None):
+            resized = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+            out.write(resized)
             
-    f.write_bytes(requests.get(file_url).content)
+        #     cv2.imshow('frame',resized)
+        # # Press q to close the video windows before it ends if you want
+        #     if cv2.waitKey(22) & 0xFF == ord('q'):
+        #         break
+            ret, frame = cap.read()
+        cap.release()
+        out.release()
     
-    os.chdir(cwd)
             
 # inspect all entries of the page
 def get_page(page, entry_limit, mp4_dir):
     
     parameters = {
         "page":page,
-        "tags":"animated -effects",
+        "tags":"animated -effects -production_materials -genga_comparison",
     }
     
     response = requests.get(base_url, params=parameters)
@@ -59,7 +72,7 @@ def get_page(page, entry_limit, mp4_dir):
         return num_entries
 
 # page limit == -1 causes all pages to be read
-def scrape(page_limit=-1,entry_limit=-1, mp4_dir=""):
+def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos"):
     
     page = 0
     
@@ -73,4 +86,4 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir=""):
     
 
 if __name__ == '__main__':
-    scrape(0, -1, "")
+    scrape(0, -1)

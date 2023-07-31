@@ -1,1 +1,13 @@
 scene*
+npframes
+venv/
+opt*
+ema*
+progr
+diffusion_openai/__pycache__
+*.npz
+model*
+frames
+*.gif
+*.png
+*.mp4

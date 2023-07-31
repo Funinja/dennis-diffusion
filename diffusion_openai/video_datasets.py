@@ -60,11 +60,11 @@ def load_data(
         )
     if deterministic:
         loader = DataLoader(
-            dataset, batch_size=batch_size, shuffle=False, num_workers=16, drop_last=True
+            dataset, batch_size=batch_size, shuffle=False, num_workers=12, drop_last=True
         )
     else:
         loader = DataLoader(
-            dataset, batch_size=batch_size, shuffle=True, num_workers=16, drop_last=True
+            dataset, batch_size=batch_size, shuffle=True, num_workers=12, drop_last=True
         )
     while True:
         yield from loader
