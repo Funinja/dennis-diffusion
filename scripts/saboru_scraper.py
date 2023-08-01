@@ -5,11 +5,17 @@ import cv2
 
 from content_splitter import c_split
 from sequence_splitter import split_sequences
+import os
 
 base_url = 'https://sakugabooru.com/post.json'
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
+cwd = os.getcwd()
+    
+video_path = os.path.join(cwd, "videos")
+
+limit = 100000
 
 def jprint(obj):
     
@@ -65,7 +71,7 @@ def get_page(page, entry_limit, mp4_dir):
         for index, entry in enumerate(response_json):
             if entry_limit != -1 and entry_limit <= index:
                 break
-            
+
             download_mp4(entry['file_url'], page, index, mp4_dir=mp4_dir, dim=(128,128))
             
         
@@ -77,6 +83,8 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     page = 0
     
     num_entries = get_page(page, entry_limit, mp4_dir)
+    
+    cwd = os.getcwd()
     
     while(num_entries != 0):
         if page_limit != -1 and page_limit <= page:
