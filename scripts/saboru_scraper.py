@@ -86,11 +86,15 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     
     cwd = os.getcwd()
     
+    print("First Page Complete")
+    
     while(num_entries != 0):
         if page_limit != -1 and page_limit <= page:
             break
         page += 1
         num_entries = get_page(page, entry_limit, mp4_dir)
+        
+        print("Getting next page: " + str(page))
         
         
     c_split(l_seq)
