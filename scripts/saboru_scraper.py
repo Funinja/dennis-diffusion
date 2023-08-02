@@ -78,7 +78,7 @@ def get_page(page, entry_limit, mp4_dir):
         return num_entries
 
 # page limit == -1 causes all pages to be read
-def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
+def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=16):
     
     page = 0
     

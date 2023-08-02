@@ -8,7 +8,7 @@ for i in range(16):
     frames.append(img)
     
 dim = frames[0].shape[0:2]
-out = cv2.VideoWriter("test.mp4", fourcc, 24, dim)
+out = cv2.VideoWriter("gen/test.mp4", fourcc, 24, dim)
 
 for i in frames:
     out.write(i)
