@@ -1,4 +1,4 @@
-from scenedetect import detect, AdaptiveDetector, split_video_ffmpeg
+from scenedetect import detect, ContentDetector, split_video_ffmpeg
 import os
 
 def c_split(l_seq):
@@ -13,7 +13,7 @@ def c_split(l_seq):
     
     for file in files:
         
-        scene_list = detect(file, AdaptiveDetector())
+        scene_list = detect(file, ContentDetector())
         new_list = []
         
         for scene in scene_list:
@@ -22,8 +22,8 @@ def c_split(l_seq):
                 new_list.append(scene)
             
         split_video_ffmpeg(file, new_list)
-        
-        os.remove(file)
+        if len(scene_list) != 0:
+            os.remove(file)
         
     os.chdir(cwd)
 

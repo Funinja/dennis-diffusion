@@ -2,6 +2,7 @@
 import requests
 import json
 import cv2
+import numpy as np
 
 from content_splitter import c_split
 from sequence_splitter import split_sequences
@@ -35,17 +36,27 @@ def download_mp4(file_url, page, entry, mp4_dir, dim):
     
     if frame is not None:
         # dim = (int(width), int(height))
-        out = cv2.VideoWriter(name_mp4, fourcc, fps, dim)
+        out = cv2.VideoWriter(name_mp4, fourcc, fps, dim, isColor=False)
         
         
         while(frame is not None):
-            resized = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
-            out.write(resized)
+            img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # Blur the image for better edge detection
+            img_blur = cv2.GaussianBlur(img_gray, (3,3), 0) 
+
+            # Sobel Edge Detection
+            # Canny Edge Detection
+            edges = cv2.Canny(image=img_blur, threshold1=75, threshold2=100) 
             
-        #     cv2.imshow('frame',resized)
-        # # Press q to close the video windows before it ends if you want
-        #     if cv2.waitKey(22) & 0xFF == ord('q'):
-        #         break
+            img_resized = cv2.resize(edges, dim, interpolation=cv2.INTER_AREA)
+            # Display Sobel Edge Detection Images
+
+            out.write(img_resized)
+            
+            # cv2.imshow('frame',img_resized)
+            # # Press q to close the video windows before it ends if you want
+            # if cv2.waitKey(22) & 0xFF == ord('q'):
+            #     break
             ret, frame = cap.read()
         cap.release()
         out.release()
@@ -73,12 +84,13 @@ def get_page(page, entry_limit, mp4_dir):
                 break
 
             download_mp4(entry['file_url'], page, index, mp4_dir=mp4_dir, dim=(128,128))
+            break
             
         
         return num_entries
 
 # page limit == -1 causes all pages to be read
-def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=16):
+def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     
     page = 0
     

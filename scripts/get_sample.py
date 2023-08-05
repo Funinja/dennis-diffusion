@@ -31,7 +31,7 @@ def create_sample():
     args = create_argparser().parse_args()
 
     dist_util.setup_dist()
-    logger.configure()
+    logger.configure(dir=os.getcwd())
     if args.seed:
         th.manual_seed(args.seed)
         np.random.seed(args.seed)
@@ -47,9 +47,9 @@ def create_sample():
     args.num_samples=1
     args.timestep_respacing='5'
     args.data_dir='sample_vids'
-    args.model_path='ema_0.9999_012000.pt'
-    args.cond_frames='0,1,14,15,'
-    
+    args.model_path='ema_0.9999_500000.pt'
+    args.cond_frames='0,1,6,7,8,14,15,'
+
     logger.log("creating model and diffusion...")
     model, diffusion = create_model_and_diffusion(
         **args_to_dict(args, model_and_diffusion_defaults().keys())
@@ -93,7 +93,7 @@ def create_sample():
 
     logger.log("sampling...")
     all_videos = []
-
+    all_gt = []
     while len(all_videos) * args.batch_size < args.num_samples:
         
         if args.cond_generation:
@@ -123,16 +123,34 @@ def create_sample():
         all_videos.extend([sample.cpu().numpy() for sample in gathered_samples])
         logger.log(f"created {len(all_videos) * args.batch_size} samples")
 
+        if args.cond_generation and args.save_gt:
+
+            video = ((video + 1) * 127.5).clamp(0, 255).to(th.uint8)
+            video = video.permute(0, 2, 3, 4, 1)
+            video = video.contiguous()
+
+            gathered_videos = [th.zeros_like(video) for _ in range(dist.get_world_size())]
+            dist.all_gather(gathered_videos, video)  # gather not supported with NCCL
+            all_gt.extend([video.cpu().numpy() for video in gathered_videos])
+            logger.log(f"created {len(all_gt) * args.batch_size} videos")
+
 
     arr = np.concatenate(all_videos, axis=0)
 
-    dist.barrier()
-    logger.log("sampling complete")
+    if args.cond_generation and args.save_gt:
+        arr_gt = np.concatenate(all_gt, axis=0)
+
+
     if dist.get_rank() == 0:
 
         shape_str = "x".join([str(x) for x in arr.shape])
         logger.log(f"saving samples to {os.path.join(logger.get_dir(), shape_str)}")
         np.savez(os.path.join(logger.get_dir(), shape_str), arr)
+
+        if args.cond_generation and args.save_gt:
+            shape_str_gt = "x".join([str(x) for x in arr_gt.shape])
+            logger.log(f"saving ground_truth to {os.path.join(logger.get_dir(), shape_str_gt)}")
+            np.savez(os.path.join(logger.get_dir(), shape_str_gt), arr_gt)
         
     data = load('1x16x64x64x3.npz')
     lst = data.files
