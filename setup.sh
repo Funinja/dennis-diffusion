@@ -11,3 +11,4 @@ pip install av
 pip install requests
 pip install opencv-python
 pip install scenedetect
+pip install scikit-image
