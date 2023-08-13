@@ -129,7 +129,7 @@ def get_page(page, entry_limit, mp4_dir):
 # page limit == -1 causes all pages to be read
 def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     
-    page = 0
+    page = 1555
     
     num_entries = get_page(page, entry_limit, mp4_dir)
     
@@ -142,8 +142,8 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
             break
         page += 1
         num_entries = get_page(page, entry_limit, mp4_dir)
-        
         print("Getting next page: " + str(page))
+        
         
         
     # c_split(l_seq)
@@ -151,4 +151,4 @@ def scrape(page_limit=-1,entry_limit=-1, mp4_dir="videos", l_seq=30):
     
 
 if __name__ == '__main__':
-    scrape(0, -1)
+    scrape(3000, -1)
